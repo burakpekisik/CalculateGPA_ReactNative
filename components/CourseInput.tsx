@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet, Platform, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { ThemedView } from './common/ThemedView';
 import { ThemedText } from './common/ThemedText';
@@ -73,7 +73,42 @@ export default function CourseInput({ defaultCredits, onSubmit }: Omit<CourseInp
     setError('');
   };
 
-  const grades = Object.keys(GRADING_SCALES[gradingSystem]);
+  const renderGradeButtons = () => {
+    const grades = Object.keys(GRADING_SCALES[gradingSystem]);
+    
+    return (
+      <View style={styles.gradeContainer}>
+        <ThemedText style={styles.gradeLabel}>Grade</ThemedText>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.gradeScrollView}
+        >
+          <View style={styles.gradeButtonContainer}>
+            {grades.map((gradeOption) => (
+              <TouchableOpacity
+                key={gradeOption}
+                style={[
+                  styles.gradeButton,
+                  grade === gradeOption && styles.selectedGrade
+                ]}
+                onPress={() => setGrade(gradeOption)}
+              >
+                <ThemedText
+                  style={[
+                    styles.gradeButtonText,
+                    grade === gradeOption && styles.selectedGradeText
+                  ]}
+                >
+                  {gradeOption}
+                </ThemedText>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+    );
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -96,10 +131,7 @@ export default function CourseInput({ defaultCredits, onSubmit }: Omit<CourseInp
             styles.picker,
             { color: theme === 'dark' ? Colors.dark.text : Colors.light.text }
           ]}
-          itemStyle={[
-            styles.pickerItem,
-            { color: theme === 'dark' ? Colors.dark.text : Colors.light.text }
-          ]}
+          itemStyle={styles.pickerItem}
         >
           {CLASS_TERMS.map((term) => (
             <Picker.Item 
@@ -112,9 +144,15 @@ export default function CourseInput({ defaultCredits, onSubmit }: Omit<CourseInp
         </Picker>
       </View>
 
+      {renderGradeButtons()}
+
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          { color: theme === 'dark' ? Colors.dark.text : Colors.light.text }
+        ]}
         placeholder="Credits"
+        placeholderTextColor={theme === 'dark' ? Colors.dark.textSecondary : Colors.light.textSecondary}
         value={credits}
         onChangeText={setCredits}
         keyboardType="numeric"
@@ -196,4 +234,38 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
   },
+  gradeContainer: {
+    marginVertical: Layout.spacing.s,
+  },
+  gradeLabel: {
+    fontSize: Layout.typography.size.s,
+    marginBottom: Layout.spacing.s,
+    color: Colors.light.textSecondary,
+  },
+  gradeScrollView: {
+    maxHeight: 50,
+  },
+  gradeButtonContainer: {
+    flexDirection: 'row',
+    gap: Layout.spacing.s,
+    paddingHorizontal: Layout.spacing.s,
+  },
+  gradeButton: {
+    paddingHorizontal: Layout.spacing.m,
+    paddingVertical: Layout.spacing.s,
+    borderRadius: Layout.borderRadius.small,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    backgroundColor: Colors.light.surface,
+  },
+  selectedGrade: {
+    backgroundColor: Colors.light.primary,
+    borderColor: Colors.light.primary,
+  },
+  gradeButtonText: {
+    fontSize: Layout.typography.size.m,
+  },
+  selectedGradeText: {
+    color: '#fff',
+  }
 });
