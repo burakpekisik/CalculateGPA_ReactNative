@@ -1,5 +1,7 @@
 export type GradingSystem = 'system1' | 'system2' | 'system3' | 'system4';
 
+export type ClassTerm = '1-1' | '1-2' | '2-1' | '2-2' | '3-1' | '3-2' | '4-1' | '4-2';
+
 export type Theme = 'light' | 'dark';
 
 export interface Course {

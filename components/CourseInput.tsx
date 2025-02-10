@@ -250,18 +250,6 @@ const styles = StyleSheet.create({
     gap: Layout.spacing.s,
     paddingHorizontal: Layout.spacing.s,
   },
-  gradeButton: {
-    paddingHorizontal: Layout.spacing.m,
-    paddingVertical: Layout.spacing.s,
-    borderRadius: Layout.borderRadius.small,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    backgroundColor: Colors.light.surface,
-  },
-  selectedGrade: {
-    backgroundColor: Colors.light.primary,
-    borderColor: Colors.light.primary,
-  },
   gradeButtonText: {
     fontSize: Layout.typography.size.m,
   },
